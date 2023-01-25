@@ -45,7 +45,7 @@ public class TokenService {
     // * * * * * * 1초
     // 10 * * * * * 1분
     // 0 0 01 * * * 1시간
-    @Scheduled(cron = "10 * * * * *")
+    @Scheduled(cron = "0 0 01 * * *")
     public void run() throws ParseException {
         System.out.println("현재 시간은 " + new Date());
 

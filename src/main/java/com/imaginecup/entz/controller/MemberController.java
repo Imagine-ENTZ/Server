@@ -16,6 +16,7 @@ import java.util.Optional;
 @RestController // JSON 형태 결과값을 반환해줌 (@ResponseBody가 필요없음)
 @RequiredArgsConstructor // final 객체를 Constructor Injection 해줌. (Autowired 역할)
 @RequestMapping(value = "/member", produces = {MediaType.APPLICATION_JSON_VALUE})// version1의 API
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class MemberController {
 
     private final MemberService memberService;
@@ -35,9 +36,10 @@ public class MemberController {
         return response;
     }
     // 로그인
-    @GetMapping("/login")
+    @PostMapping("/login")
     public Map<String, Object> login(@RequestBody Member value) {
         Map<String, Object> response = new HashMap<>();
+
         boolean oMember = memberService.login(value);
         if(oMember == true) {
             response.put("result", "SUCCESS");

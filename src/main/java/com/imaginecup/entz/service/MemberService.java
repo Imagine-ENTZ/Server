@@ -3,6 +3,7 @@ package com.imaginecup.entz.service;
 import com.imaginecup.entz.domain.Member;
 import com.imaginecup.entz.domain.Peer;
 import com.imaginecup.entz.repository.MemberRepository;
+import com.sun.tools.jconsole.JConsoleContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,23 +38,31 @@ public class MemberService {
     // 등록
     @Transactional
     public Member save(Member value) {
-        Member user = Member.builder()
-                .name(value.getName())
-                .user(value.getUser())
-                .password(value.getPassword()).build();
-        return memberRepository.save(user);
+
+        if(memberRepository.existsByUser(value.getUser())){
+            return null;
+        }
+        else {
+            Member user = Member.builder()
+                    .name(value.getName())
+                    .user(value.getUser())
+                    .password(value.getPassword()).build();
+            return memberRepository.save(user);
+        }
     }
 
     // 로그인
     @Transactional
     public boolean login(Member value) {
-
         if(memberRepository.existsByUser(value.getUser())){
             Member oMember = memberRepository.findByUser(value.getUser());
-            if(oMember.getPassword().equals(value.getPassword()))
+
+            if(oMember.getPassword().equals(value.getPassword())) {
                 return true;
-            else
+            }
+            else {
                 return false;
+            }
         }
         else
             return false;

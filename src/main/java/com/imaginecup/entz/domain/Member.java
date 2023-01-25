@@ -17,7 +17,7 @@ public class Member {
     @Column(name="id")
     @Id
     private String user;  // 사용자 아이디
-    @Column(nullable = false)
+    @Column
     private String name;    // 사용자 이름
     @Column
     private String password;      // 사용자 패스워드
