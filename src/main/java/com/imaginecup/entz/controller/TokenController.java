@@ -19,8 +19,8 @@ public class TokenController {
     @GetMapping("")
     public Optional<Token> findById() {
         Optional<Token> token = tokenService.findByToken();
-
         return token;
     }
+
 
 }
