@@ -20,11 +20,11 @@ public class TestController {
     //pub/hello 으로 요청들어왓을때
     @MessageMapping("/gameroom/welcome")
     public void message(Member member){
-        simpMessageSendingOperations.convertAndSend("/sub/chat/" + member.getId()  , member);
+        simpMessageSendingOperations.convertAndSend("/sub/chat/" + member.getUser()  , member);
     }
     @MessageMapping("/gameroom/offer")
     public void sendOffer(Member member){
-        simpMessageSendingOperations.convertAndSend("/sub/chat/" + member.getId()  , member);
+        simpMessageSendingOperations.convertAndSend("/sub/chat/" + member.getUser()  , member);
     }
 
     @MessageMapping("/gameroom/123")
@@ -44,6 +44,8 @@ public class TestController {
 //
 //        System.out.println(peerContent.toString());
         System.out.println(" 지금 들어온 결과값 :" + peer.getType());
+
+        System.out.println(peer.getIce());
 
         simpMessageSendingOperations.convertAndSend("/sub/gameroom/123" , peer);
 //        simpMessageSendingOperations.convertAndSend("/sub/chat/" + member.getId()  , member);

@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
@@ -22,25 +25,43 @@ public class MemberService {
     }
 
     // id로 조회
-    public Optional<Member> findById(Long id) {
-        return memberRepository.findById(id);
+    public Member findByUser(String id) {
+        return memberRepository.findByUser(id);
     }
 
+    // 존재여부 확인
+    public  boolean existsByUser(String id) {
+        return memberRepository.existsByUser(id);
+    }
 
     // 등록
     @Transactional
     public Member save(Member value) {
         Member user = Member.builder()
-                .id(value.getId())
                 .name(value.getName())
-                .gender(value.getGender())
-                .level(value.getLevel()).build();
+                .user(value.getUser())
+                .password(value.getPassword()).build();
         return memberRepository.save(user);
+    }
+
+    // 로그인
+    @Transactional
+    public boolean login(Member value) {
+
+        if(memberRepository.existsByUser(value.getUser())){
+            Member oMember = memberRepository.findByUser(value.getUser());
+            if(oMember.getPassword().equals(value.getPassword()))
+                return true;
+            else
+                return false;
+        }
+        else
+            return false;
     }
 
     // 삭제
     @Transactional
-    public int delete(long id) {
+    public int delete(String id) {
         Optional<Member> oMember = memberRepository.findById(id);
         if(oMember.isPresent()) {
             memberRepository.delete(oMember.get());

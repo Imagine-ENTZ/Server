@@ -22,12 +22,26 @@ public class MemberController {
 
     // id로 유저검색
     @GetMapping("/{id}")
-    public Map<String, Object> findById(@PathVariable("id") Long id) {
+    public Map<String, Object> findById(@PathVariable("id") String id) {
         Map<String, Object> response = new HashMap<>();
-        Optional<Member> oMember = memberService.findById(id);
-        if(oMember.isPresent()) {
+        Member oMember = memberService.findByUser(id);
+        if(memberService.existsByUser(id)) {
             response.put("result", "SUCCESS");
-            response.put("user", oMember.get());
+            response.put("user", oMember.getUser());
+        } else {
+            response.put("result", "FAIL");
+            response.put("reason", "일치하는 회원 정보가 없습니다. 사용자 id를 확인해주세요.");
+        }
+        return response;
+    }
+    // 로그인
+    @GetMapping("/login")
+    public Map<String, Object> login(@RequestBody Member value) {
+        Map<String, Object> response = new HashMap<>();
+        boolean oMember = memberService.login(value);
+        if(oMember == true) {
+            response.put("result", "SUCCESS");
+            response.put("user", value.getUser());
         } else {
             response.put("result", "FAIL");
             response.put("reason", "일치하는 회원 정보가 없습니다. 사용자 id를 확인해주세요.");
@@ -54,10 +68,10 @@ public class MemberController {
 
     // 회원삭제
     @DeleteMapping("/{id}")
-    public Map<String, Object> delete(@PathVariable("id") long id) {
+    public Map<String, Object> delete(@RequestBody Member value) {
         Map<String, Object> response = new HashMap<>();
 
-        if(memberService.delete(id) > 0) {
+        if(memberService.delete(value.getUser()) > 0) {
             response.put("result", "SUCCESS");
         } else {
             response.put("result", "FAIL");

@@ -25,5 +25,7 @@ public class Peer {
     private String offer;
     @Column
     private String answer;
+    @Column
+    private String ice;
 
 }

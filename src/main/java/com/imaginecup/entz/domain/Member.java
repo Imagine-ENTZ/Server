@@ -14,14 +14,12 @@ import javax.persistence.*;
 public class Member {
 
 
+    @Column(name="id")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 키 값을 자동생성
-    private Long id;        // 사용자 id
-    @Column
+    private String user;  // 사용자 아이디
+    @Column(nullable = false)
     private String name;    // 사용자 이름
     @Column
-    private String gender;  // 사용자 성별
-    @Column(nullable = false)
-    private Long level;      // 사용자 레벨
+    private String password;      // 사용자 패스워드
 
 }
