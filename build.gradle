@@ -36,6 +36,9 @@ dependencies {
 	implementation 'com.azure.spring:spring-cloud-azure-starter-storage-blob:4.5.0'
 	implementation 'com.azure:azure-identity:1.7.2'
 	implementation 'com.azure:azure-storage-blob:12.20.1'
+
+	//webclient
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
 tasks.named('test') {
