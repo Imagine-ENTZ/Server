@@ -33,6 +33,24 @@ public class GameroomController {
         return response;
     }
 
+    // 입장가능여부 확인
+    @GetMapping("/{code}")
+    public Map<String, Object> findByFull(@PathVariable("code") Long code) {
+        Map<String, Object> response = new HashMap<>();
+
+
+        Boolean isFull = gameroomService.find(code);
+
+        if (isFull) {
+            response.put("result", "SUCCESS");
+        }
+        else {
+            response.put("result", "FAIL");
+        }
+        return response;
+    }
+
+
     // 게임방 등록
     @PostMapping("")
     public Map<String, Object> save(@RequestBody Gameroom value) {

@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface GameroomRepository extends JpaRepository<Gameroom, Long> {
 
 
+    Gameroom findByCode(Long code);
 }

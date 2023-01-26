@@ -20,4 +20,6 @@ public class Gameroom {
     private String name;    // 방이름
     @Column
     private String type;  // 게임종류
+    @Column
+    private Long full; //입장여부
 }
