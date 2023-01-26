@@ -2,6 +2,7 @@ package com.imaginecup.entz.service;
 
 
 import com.imaginecup.entz.domain.Gameroom;
+import com.imaginecup.entz.domain.Member;
 import com.imaginecup.entz.repository.GameroomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,13 +24,25 @@ public class GameroomService {
 
     // 참여여부 확인
     @Transactional
-    public boolean find(Long code) {
+    public Gameroom findByCode(Long code) {return gameroomRepository.findByCode(code);}
+
+
+
+    // 참가여부 변경
+    @Transactional
+    public boolean setFull(Long code) {
+
         Gameroom room = gameroomRepository.findByCode(code);
 
-        if (room.getFull() == 1)
-            return false;
-        else
-            return true;
+        if(room != null){
+           if( room.getFull() == 0)
+               room.setFull(1L);
+           else
+               room.setFull(0L);
+           return true;
+        }
+        return false;
+
     }
 
     // 모든 방 조회

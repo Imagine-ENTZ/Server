@@ -38,10 +38,9 @@ public class GameroomController {
     public Map<String, Object> findByFull(@PathVariable("code") Long code) {
         Map<String, Object> response = new HashMap<>();
 
+        Gameroom room = gameroomService.findByCode(code);
 
-        Boolean isFull = gameroomService.find(code);
-
-        if (isFull) {
+        if (room != null) {
             response.put("result", "SUCCESS");
         }
         else {
@@ -49,6 +48,23 @@ public class GameroomController {
         }
         return response;
     }
+
+    // 입장가능여부 변경
+    @GetMapping("change/{code}")
+    public Map<String, Object> change(@PathVariable("code") Long code) {
+        Map<String, Object> response = new HashMap<>();
+
+        boolean isChange = gameroomService.setFull(code);
+
+        if (isChange == true) {
+            response.put("result", "SUCCESS");
+        }
+        else {
+            response.put("result", "FAIL");
+        }
+        return response;
+    }
+
 
 
     // 게임방 등록
