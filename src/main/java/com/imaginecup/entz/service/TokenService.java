@@ -50,7 +50,7 @@ public class TokenService {
         System.out.println("현재 시간은 " + new Date());
 
         WebClient client = WebClient.builder()
-                .baseUrl("http://localhost:8080")
+                .baseUrl(Constants.AZURE_SERVER)
                 .build();
 
         JSONObject productInfo = new JSONObject();
@@ -60,7 +60,7 @@ public class TokenService {
 
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = (JSONObject) parser.parse(client.post()
-                .uri("https://api.flaticon.com/v3/app/authentication")
+                .uri(Constants.FLATICON_URL)
                 .bodyValue(productInfo)
                 .retrieve()
                 .bodyToMono(String.class)
