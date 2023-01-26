@@ -19,41 +19,26 @@ import java.util.Map;
 public class TestController {
     private final SimpMessageSendingOperations simpMessageSendingOperations;
     //pub/hello 으로 요청들어왓을때
-    @MessageMapping("/gameroom/welcome")
+    @MessageMapping("/play/welcome")
     public void message(Member member){
         simpMessageSendingOperations.convertAndSend("/sub/chat/" + member.getUser()  , member);
     }
-    @MessageMapping("/gameroom/offer")
+    @MessageMapping("/play/offer")
     public void sendOffer(Member member){
         simpMessageSendingOperations.convertAndSend("/sub/chat/" + member.getUser()  , member);
     }
 
-    @MessageMapping("/gameroom/123")
+    @MessageMapping("/play")
     @ResponseBody
     public void getEnter(@RequestBody Peer peer) {
 
-//        Peer peerContent;
-//
-//        peerContent = Peer.builder()
-//                .id(0L)
-//                .type(peer.getType())
-//                .room_id(peer.getRoom_id())
-//                .sender(peer.getSender())
-//                .offer(peer.getOffer())
-//                .answer(peer.getAnswer())
-//                .build();
-//
-//        System.out.println(peerContent.toString());
+
         System.out.println(" 지금 들어온 결과값 :" + peer.getType());
 
-        System.out.println(peer.getIce());
 
-        simpMessageSendingOperations.convertAndSend("/sub/gameroom/123" , peer);
-//        simpMessageSendingOperations.convertAndSend("/sub/chat/" + member.getId()  , member);
+        simpMessageSendingOperations.convertAndSend("/sub/play/" + peer.getRoom_id() , peer);
     }
 
-    //client가 send 경로(setApplicationDestinationPrefixes)
-    //"/pub/chat/enter" : 회원 입장 -> "/sub/chat/department/{departmentId}"로 채팅방에 참여한 회원 이메일 전송
 
 
 }
