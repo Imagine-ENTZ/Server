@@ -58,6 +58,7 @@ public class GameroomService {
         Gameroom room = Gameroom.builder()
                 .code(value.getCode())
                 .name(value.getName())
+                .full(value.getFull())
                 .type(value.getType()).build();
         return gameroomRepository.save(room);
     }
