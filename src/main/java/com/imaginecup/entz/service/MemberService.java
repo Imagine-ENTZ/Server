@@ -39,6 +39,7 @@ public class MemberService {
     @Transactional
     public Member save(Member value) {
 
+
         if(memberRepository.existsByUser(value.getUser())){
             return null;
         }

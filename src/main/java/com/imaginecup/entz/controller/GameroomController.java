@@ -21,7 +21,6 @@ public class GameroomController {
 
 
     // 게임방 모두 조회
-    // id로 유저검색
     @GetMapping("")
     public Map<String, Object> findById() {
         Map<String, Object> response = new HashMap<>();
@@ -84,7 +83,7 @@ public class GameroomController {
     }
 
     // 게임방 삭제
-    @DeleteMapping("")
+    @PostMapping("delete")
     public Map<String, Object> delete(@RequestBody Gameroom value) {
         Map<String, Object> response = new HashMap<>();
 
