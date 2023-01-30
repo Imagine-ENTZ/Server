@@ -19,4 +19,7 @@ public class Token {
     private Integer id;
     @Column
     private String token;
+
+    @Column
+    private Long date;
 }
