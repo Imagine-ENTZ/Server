@@ -3,6 +3,7 @@ package com.imaginecup.entz.controller;
 import com.imaginecup.entz.domain.Gameroom;
 import com.imaginecup.entz.domain.Member;
 import com.imaginecup.entz.service.GameroomService;
+import com.imaginecup.entz.service.implement.GameroomServiceImp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -17,14 +18,13 @@ import java.util.Map;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class GameroomController {
 
-    private final GameroomService gameroomService;
-
+    private final GameroomServiceImp gameroomServiceImp;
 
     // 게임방 모두 조회
     @GetMapping("")
     public Map<String, Object> findById() {
         Map<String, Object> response = new HashMap<>();
-        List<Gameroom> gameroomList = gameroomService.getRoomList();
+        List<Gameroom> gameroomList = gameroomServiceImp.getRoomList();
 
         response.put("result", "SUCCESS");
         response.put("room", gameroomList);
@@ -37,7 +37,7 @@ public class GameroomController {
     public Map<String, Object> findByFull(@PathVariable("code") Long code) {
         Map<String, Object> response = new HashMap<>();
 
-        Gameroom room = gameroomService.findByCode(code);
+        Gameroom room = gameroomServiceImp.findByCode(code);
 
         if (room != null) {
             response.put("result", "SUCCESS");
@@ -53,7 +53,7 @@ public class GameroomController {
     public Map<String, Object> change(@PathVariable("code") Long code) {
         Map<String, Object> response = new HashMap<>();
 
-        boolean isChange = gameroomService.setFull(code);
+        boolean isChange = gameroomServiceImp.setFull(code);
 
         if (isChange == true) {
             response.put("result", "SUCCESS");
@@ -71,7 +71,7 @@ public class GameroomController {
     public Map<String, Object> save(@RequestBody Gameroom value) {
         Map<String, Object> response = new HashMap<>();
 
-        Gameroom room = gameroomService.save(value);
+        Gameroom room = gameroomServiceImp.save(value);
         if(room != null) {
             response.put("result", "SUCCESS");
             response.put("room", room);
@@ -87,7 +87,7 @@ public class GameroomController {
     public Map<String, Object> delete(@RequestBody Gameroom value) {
         Map<String, Object> response = new HashMap<>();
 
-        if(gameroomService.delete(value.getCode()) > 0) {
+        if(gameroomServiceImp.delete(value.getCode()) > 0) {
             response.put("result", "SUCCESS");
         } else {
             response.put("result", "FAIL");

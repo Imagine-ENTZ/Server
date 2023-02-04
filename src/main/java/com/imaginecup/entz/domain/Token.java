@@ -18,8 +18,7 @@ public class Token {
     @Id
     private Integer id;
     @Column
-    private String token;
-
+    private String token;  //토큰
     @Column
-    private Long date;
+    private Long date; // 날짜
 }

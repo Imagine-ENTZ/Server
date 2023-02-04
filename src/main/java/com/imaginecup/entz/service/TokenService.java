@@ -7,10 +7,12 @@ import com.nimbusds.jose.shaded.json.JSONObject;
 import com.nimbusds.jose.shaded.json.parser.JSONParser;
 import com.nimbusds.jose.shaded.json.parser.ParseException;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -45,6 +47,8 @@ public class TokenService {
         else
             return null;
     }
+
+    // 새로운 토큰 발급
     public String getNewToken() throws ParseException {
         WebClient client = WebClient.builder()
                 .baseUrl(Constants.AZURE_SERVER)
@@ -84,33 +88,33 @@ public class TokenService {
     // * * * * * * 1초
     // 10 * * * * * 1분
     // 0 0 01 * * * 1시간
-//    @Scheduled(cron = "0 0 01 * * *")
-//    public void run() throws ParseException {
-//        System.out.println("현재 시간은 " + new Date());
-//
-//        WebClient client = WebClient.builder()
-//                .baseUrl(Constants.AZURE_SERVER)
-//                .build();
-//
-//        JSONObject productInfo = new JSONObject();
-//
-//        productInfo.put("apikey", Constants.TOKEN);
-//
-//
-//        JSONParser parser = new JSONParser();
-//        JSONObject jsonObject = (JSONObject) parser.parse(client.post()
-//                .uri(Constants.FLATICON_URL)
-//                .bodyValue(productInfo)
-//                .retrieve()
-//                .bodyToMono(String.class)
-//                .block());
-//
-//        JSONObject data = (JSONObject)  jsonObject.get("data");
-//        //data.get("token");
-//
-//        updateToken(data.get("token").toString());
-//        System.out.println(data.get("token").toString()); // apple
-//
-//    }
+    @Scheduled(cron = "0 0 01 * * *")
+    public void run() throws ParseException {
+        System.out.println("현재 시간은 " + new Date());
+
+        WebClient client = WebClient.builder()
+                .baseUrl(Constants.AZURE_SERVER)
+                .build();
+
+        JSONObject productInfo = new JSONObject();
+
+        productInfo.put("apikey", Constants.FLATICON_API);
+
+
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = (JSONObject) parser.parse(client.post()
+                .uri(Constants.FLATICON_URL)
+                .bodyValue(productInfo)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block());
+
+        JSONObject data = (JSONObject)  jsonObject.get("data");
+        //data.get("token");
+
+        updateToken(data.get("token").toString(), 0L);
+        System.out.println(data.get("token").toString()); // apple
+
+    }
 
 }
