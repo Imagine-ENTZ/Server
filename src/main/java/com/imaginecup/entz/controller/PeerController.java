@@ -4,6 +4,7 @@ import com.imaginecup.entz.domain.Member;
 import com.imaginecup.entz.domain.Peer;
 import com.imaginecup.entz.service.MemberService;
 import com.imaginecup.entz.service.PeerService;
+import com.imaginecup.entz.service.implement.PeerServiceImp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +19,13 @@ import java.util.Optional;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PeerController {
 
-    private final PeerService peerService;
+    private final PeerServiceImp peerServiceImp;
 
     @GetMapping("/{id}")
     public Map<String, Object> findById(@PathVariable("id") Long id) {
         Map<String, Object> response = new HashMap<>();
 
-        Optional<Peer> oPeer = peerService.findById(id);
+        Optional<Peer> oPeer = peerServiceImp.findById(id);
         if(oPeer.isPresent()) {
             response.put("result", "SUCCESS");
             response.put("user", oPeer.get());

@@ -1,8 +1,6 @@
 package com.imaginecup.entz.service;
 
 import com.imaginecup.entz.domain.Member;
-import org.springframework.stereotype.Service;
-@Service
 public interface MemberService {
 
     // id로 조회

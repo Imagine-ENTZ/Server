@@ -2,6 +2,7 @@ package com.imaginecup.entz.controller;
 
 import com.imaginecup.entz.domain.Token;
 import com.imaginecup.entz.service.TokenService;
+import com.imaginecup.entz.service.implement.TokenServiceImp;
 import com.nimbusds.jose.shaded.json.parser.ParseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -17,19 +18,19 @@ import java.util.Optional;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class TokenController {
 
-    private final TokenService tokenService;
+    private final TokenServiceImp tokenServiceImp;
 
     // 토큰 가져오기
     @GetMapping("")
     public Optional<Token> findToken() {
-        Optional<Token> token = tokenService.findByToken();
+        Optional<Token> token = tokenServiceImp.findByToken();
         return token;
     }
 
     // 새로 발급된 토큰 가져오기
     @PostMapping("/{date}")
     public Map<String, Object> findNewToken(@PathVariable("date") Long date) throws ParseException {
-        Optional<Token> token = tokenService.findNewToken(date);
+        Optional<Token> token = tokenServiceImp.findNewToken(date);
         Map<String, Object> response = new HashMap<>();
         if(token != null) {
             response.put("result", "SUCCESS");

@@ -1,120 +1,25 @@
 package com.imaginecup.entz.service;
 
 import com.imaginecup.entz.domain.Token;
-import com.imaginecup.entz.repository.TokenRepository;
-import com.imaginecup.entz.utils.Constants;
-import com.nimbusds.jose.shaded.json.JSONObject;
-import com.nimbusds.jose.shaded.json.parser.JSONParser;
 import com.nimbusds.jose.shaded.json.parser.ParseException;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import javax.transaction.Transactional;
-import java.util.Date;
 import java.util.Optional;
 
-@Service
-@EnableScheduling
-public class TokenService {
 
-    private final TokenRepository tokenRepository;
+public interface TokenService {
 
-    public TokenService(TokenRepository tokenRepository) {
-        this.tokenRepository = tokenRepository;
-    }
-
-    public Optional<Token> findByToken() {
-        return tokenRepository.findById(1);
-    }
+    Optional<Token> findByToken();
 
     // 등록
-    @Transactional
-    public Optional<Token> findNewToken(Long date) throws ParseException {
-        Optional<Token> token= findByToken();
-
-        System.out.println(date + " " +token.get().getDate());
-        if(date - token.get().getDate() > 3600) {
-
-            String newToken = getNewToken();
-            token.get().setToken(newToken);
-            token.get().setDate(date);
-            updateToken(newToken,date);
-
-            return token;
-        }
-        else
-            return null;
-    }
+    Optional<Token> findNewToken(Long date) throws ParseException;
 
     // 새로운 토큰 발급
-    public String getNewToken() throws ParseException {
-        WebClient client = WebClient.builder()
-                .baseUrl(Constants.AZURE_SERVER)
-                .build();
+    String getNewToken() throws ParseException;
 
-        JSONObject productInfo = new JSONObject();
+    // 발급된 토큰 업데이트
+    void updateToken(String uptToken, Long date);
 
-        //api를 이용해서 토큰 발급
-        productInfo.put("apikey", Constants.FLATICON_API);
-
-        JSONParser parser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) parser.parse(client.post()
-                .uri(Constants.FLATICON_URL)
-                .bodyValue(productInfo)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block());
-
-        JSONObject data = (JSONObject)  jsonObject.get("data");
-        //data.get("token");
-
-//        updateToken(data.get("token").toString());
-
-        return data.get("token").toString();
-    }
-
-
-    public void updateToken(String uptToken, Long date) {
-        Optional<Token> token = findByToken();
-        token.ifPresent(t-> {
-            t.setToken(uptToken);
-            t.setDate((date));
-            tokenRepository.save(t);
-        });
-    }
-
-    // * * * * * * 1초
-    // 10 * * * * * 1분
-    // 0 0 01 * * * 1시간
-    @Scheduled(cron = "0 0 01 * * *")
-    public void run() throws ParseException {
-        System.out.println("현재 시간은 " + new Date());
-
-        WebClient client = WebClient.builder()
-                .baseUrl(Constants.AZURE_SERVER)
-                .build();
-
-        JSONObject productInfo = new JSONObject();
-
-        productInfo.put("apikey", Constants.FLATICON_API);
-
-
-        JSONParser parser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) parser.parse(client.post()
-                .uri(Constants.FLATICON_URL)
-                .bodyValue(productInfo)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block());
-
-        JSONObject data = (JSONObject)  jsonObject.get("data");
-        //data.get("token");
-
-        updateToken(data.get("token").toString(), 0L);
-        System.out.println(data.get("token").toString()); // apple
-
-    }
+    // 1시간마다 자동으로 토큰 새로 발급
+    void run() throws ParseException;
 
 }
