@@ -4,6 +4,7 @@ import com.imaginecup.entz.domain.Member;
 import com.imaginecup.entz.domain.Peer;
 import com.imaginecup.entz.repository.MemberRepository;
 import com.imaginecup.entz.service.MemberService;
+import com.imaginecup.entz.service.implement.MemberServiceImp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -19,14 +20,14 @@ import java.util.Optional;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class MemberController {
 
-    private final MemberService memberService;
+    private final MemberServiceImp memberServiceImp;
 
     // id로 유저검색
     @GetMapping("/{id}")
     public Map<String, Object> findById(@PathVariable("id") String id) {
         Map<String, Object> response = new HashMap<>();
-        Member oMember = memberService.findByUser(id);
-        if(memberService.existsByUser(id)) {
+        Member oMember = memberServiceImp.findByUser(id);
+        if(memberServiceImp.existsByUser(id)) {
             response.put("result", "SUCCESS");
             response.put("user", oMember.getUser());
         } else {
@@ -40,7 +41,7 @@ public class MemberController {
     public Map<String, Object> login(@RequestBody Member value) {
         Map<String, Object> response = new HashMap<>();
 
-        boolean oMember = memberService.login(value);
+        boolean oMember = memberServiceImp.login(value);
         if(oMember == true) {
             response.put("result", "SUCCESS");
             response.put("user", value.getUser());
@@ -56,7 +57,7 @@ public class MemberController {
     public Map<String, Object> save(@RequestBody Member value) {
         Map<String, Object> response = new HashMap<>();
 
-        Member user = memberService.save(value);
+        Member user = memberServiceImp.save(value);
         if(user != null) {
             response.put("result", "SUCCESS");
             response.put("user", user);
@@ -73,7 +74,7 @@ public class MemberController {
     public Map<String, Object> delete(@RequestBody Member value) {
         Map<String, Object> response = new HashMap<>();
 
-        if(memberService.delete(value.getUser()) > 0) {
+        if(memberServiceImp.delete(value.getUser()) > 0) {
             response.put("result", "SUCCESS");
         } else {
             response.put("result", "FAIL");

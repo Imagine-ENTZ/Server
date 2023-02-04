@@ -1,6 +1,5 @@
 package com.imaginecup.entz.service;
 
-
 import com.imaginecup.entz.domain.Gameroom;
 import java.util.List;
 
